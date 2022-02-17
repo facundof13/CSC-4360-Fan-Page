@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'register.dart';
+import 'package:fan_page/services/auth.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,11 +31,8 @@ class MyCupertinoApp extends StatelessWidget {
       home: const MainPage(),
       initialRoute: '/',
       routes: {
-        // '/': (context) => const MainPage(),
         '/register': (context) => const RegisterApp(),
-        '/compose': (context) => const ComposeMessageApp(),
       },
-      //   '/feed': (context) => const HomePage(),
     );
   }
 }
@@ -49,12 +47,21 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State {
   FirebaseAuth auth = FirebaseAuth.instance;
 
+  final user = FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    if (user != null) {
+      Auth.setUser(user);
+    } else {
+      Auth.clearUser();
+    }
+  });
+
   @override
   Widget build(BuildContext content) {
     return StreamBuilder(
         stream: auth.authStateChanges(),
         builder: (BuildContext context, AsyncSnapshot<User?> user) {
-          return user.data?.uid != null ? HomePage() : LoginApp();
+          print(user.data?.uid);
+          return user.data?.uid != null ? const HomePage() : const LoginApp();
         });
   }
 }
