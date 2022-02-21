@@ -63,8 +63,6 @@ class _LoginScreenState extends State {
       var signedInUser =
           userExists.docs.where((element) => element['uid'] == user!.uid);
 
-      print(signedInUser);
-
       if (signedInUser.isEmpty) {
         List<String> displayName = user.displayName!.split(" ");
         String firstName = displayName[0];

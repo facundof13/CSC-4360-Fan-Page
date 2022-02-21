@@ -60,7 +60,6 @@ class _MainPageState extends State {
     return StreamBuilder(
         stream: auth.authStateChanges(),
         builder: (BuildContext context, AsyncSnapshot<User?> user) {
-          print(user.data?.uid);
           return user.data?.uid != null ? const HomePage() : const LoginApp();
         });
   }
